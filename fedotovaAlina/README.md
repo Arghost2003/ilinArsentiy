@@ -1,0 +1,1 @@
+https://www.figma.com/design/h441DvmHVuqj206EYTaGFo/fedotovaAlina?node-id=0-1&t=Ig7Ckhukjqn4NUQt-1

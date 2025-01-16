@@ -1,8 +1,11 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView } from "react-native";
+import { useTheme } from '../ThemeContext';
 
 export default function Lab1() {
+    const { isDarkTheme } = useTheme();
     const [color, setColor] = useState("skyblue");
+
     const getRandomColor = () => {
         const letters = "0123456789ABCDEF";
         let color = "#";
@@ -11,13 +14,18 @@ export default function Lab1() {
         }
         return color;
     };
+
     const changeColor = () => {
         setColor(getRandomColor());
     };
+
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={[styles.container, { backgroundColor: isDarkTheme ? '#333' : '#F5FCFF' }]}>
             <View style={[styles.colorBlock, { backgroundColor: color }]} />
-            <TouchableOpacity style={styles.button} onPress={changeColor}>
+            <TouchableOpacity 
+                style={[styles.button, { backgroundColor: isDarkTheme ? '#555' : 'blue' }]} 
+                onPress={changeColor}
+            >
                 <Text style={styles.buttonText}>Сменить цвет</Text>
             </TouchableOpacity>
         </SafeAreaView>
@@ -29,7 +37,6 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "#F5FCFF",
     },
     colorBlock: {
         width: 200,
@@ -38,7 +45,6 @@ const styles = StyleSheet.create({
         borderRadius: 20,
     },
     button: {
-        backgroundColor: "blue",
         padding: 10,
         borderRadius: 5,
     },

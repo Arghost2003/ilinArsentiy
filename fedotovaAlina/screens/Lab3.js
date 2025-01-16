@@ -1,14 +1,14 @@
-// screens/UniversityList.js
 import React, { useEffect, useState } from 'react';
-import { View, Text, Picker, FlatList, ActivityIndicator, Alert, StyleSheet, TouchableOpacity, Linking } from 'react-native';
-import { useTheme } from '../context/ThemeContext'; // Импортируем контекст темы
+import { Picker } from '@react-native-picker/picker';
+import { View, Text, FlatList, ActivityIndicator, Alert, StyleSheet, TouchableOpacity, Linking } from 'react-native';
+import { useTheme } from '../context/ThemeContext'; 
 
 const UniversityList = () => {
-  const { isDarkTheme } = useTheme(); // Получаем состояние темы
+  const { isDarkTheme } = useTheme(); 
   const [universities, setUniversities] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [country, setCountry] = useState('Kazakhstan'); // Начальная страна
+  const [country, setCountry] = useState('Kazakhstan'); 
 
   useEffect(() => {
     const fetchUniversities = async () => {
@@ -37,7 +37,11 @@ const UniversityList = () => {
   };
 
   if (loading) {
-    return <ActivityIndicator size="large" color="#0000ff" />;
+    return (
+      <View style={[styles.container, isDarkTheme ? styles.darkContainer : styles.lightContainer]}>
+        <ActivityIndicator size="large" color={isDarkTheme ? '#FFD700' : '#6200EE'} />
+      </View>
+    );
   }
 
   if (error) {
@@ -47,23 +51,29 @@ const UniversityList = () => {
 
   return (
     <View style={[styles.container, isDarkTheme ? styles.darkContainer : styles.lightContainer]}>
-      <Text style={[styles.title, isDarkTheme ? styles.darkText : styles.lightText]}>Universities</Text>
-      <Text style={[styles.label, isDarkTheme ? styles.darkText : styles.lightText]}>Choose a country:</Text>
+      <Text style={[styles.title, isDarkTheme ? styles.darkText : styles.lightText]}>Университеты</Text>
+      <Text style={[styles.label, isDarkTheme ? styles.darkText : styles.lightText]}>Выбрать страну:</Text>
       <Picker
         selectedValue={country}
-        style={styles.picker}
+        style={[styles.picker, isDarkTheme ? styles.darkPicker : styles.lightPicker]}
         onValueChange={handleCountryChange}
       >
-        <Picker.Item label="Kazakhstan" value="Kazakhstan" />
-        <Picker.Item label="USA" value="USA" />
-        <Picker.Item label="Germany" value="Germany" />
-        <Picker.Item label="France" value="France" />
+        <Picker.Item label="Казахстан" value="Kazakhstan" />
+        <Picker.Item label="США" value="USA" />
+        <Picker.Item label="Германия" value="Germany" />
+        <Picker.Item label="Франция" value="France" />
       </Picker>
       <FlatList
         data={universities}
-        keyExtractor={(item) => item.alpha_two_code}
+        keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => Linking.openURL(item.web_pages[0])}>
+          <TouchableOpacity 
+            onPress={() => Linking.openURL(item.web_pages[0])} 
+            style={[
+              styles.universityCard, 
+              isDarkTheme ? styles.darkCard : styles.lightCard
+            ]}
+          >
             <Text style={[styles.universityName, isDarkTheme ? styles.darkText : styles.lightText]}>
               {item.name}
             </Text>
@@ -80,37 +90,65 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   darkContainer: {
-    backgroundColor: '#333', // Фон для темной темы
+    backgroundColor: '#1E1E1E',
   },
   lightContainer: {
-    backgroundColor: '#ffffff', // Фон для светлой темы
+    backgroundColor: '#F8F9FA',
   },
   title: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginBottom: 20,
+    textAlign: 'center',
   },
   darkText: {
-    color: '#ffffff', // Цвет текста для темной темы
+    color: '#FFFFFF', 
   },
   lightText: {
-    color: '#000000', // Цвет текста для светлой темы
+    color: '#333333', 
   },
   label: {
-    fontSize: 16,
-    marginBottom: 5,
+    fontSize: 18,
+    marginBottom: 10,
+    textAlign: 'center',
   },
   picker: {
     height: 50,
     width: '100%',
     marginBottom: 20,
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingHorizontal: 10,
+  },
+  darkPicker: {
+    backgroundColor: '#2A2A2A',
+    color: '#FFFFFF',
+  },
+  lightPicker: {
+    backgroundColor: '#FFFFFF',
+    color: '#333333',
+  },
+  universityCard: {
+    padding: 15,
+    marginBottom: 10,
+    borderRadius: 8,
+  },
+  darkCard: {
+    backgroundColor: '#333333',
+    borderColor: '#555555',
+    borderWidth: 1,
+  },
+  lightCard: {
+    backgroundColor: '#FFFFFF',
+    borderColor: '#DDD',
+    borderWidth: 1,
   },
   universityName: {
     fontSize: 18,
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+    fontWeight: '500',
+    textAlign: 'center',
   },
 });
 
 export default UniversityList;
+

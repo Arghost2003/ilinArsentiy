@@ -1,0 +1,1 @@
+[Дизайн приложения (Figma)](https://www.figma.com/design/QmJhR2pH11sZ30T70BmpcE/neustroevNurgun?node-id=0-1&p=f&t=shguahtdubguwjqf-0)
